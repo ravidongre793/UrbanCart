@@ -1,0 +1,119 @@
+import React, { useState } from 'react'
+import { Button } from "@/components/ui/button"
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Eye, EyeOff, Loader2 } from "lucide-react"
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
+import axios from 'axios'
+
+const Login = () => {
+    const [showPassword, setShowPassword] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [formData, setFormData] = useState({
+        email: "",
+        password: ""
+    })
+    const navigate = useNavigate();
+
+    const handleChange = (e) => {
+        const { id, value } = e.target
+        setFormData(prev => ({
+            ...prev,
+            [id]: value
+        }))
+    }
+
+    const submitHandle = async (e) => {
+        e.preventDefault()
+        try {
+            setLoading(true)
+            const res = await axios.post("http://localhost:8000/api/v1/user/login", formData, {
+                headers: {
+                    "content-type": "application/json"
+                }
+            })
+            if (res.data.success) {
+                localStorage.setItem("accessToken", res.data.accessToken)
+                localStorage.setItem("refreshToken", res.data.refreshToken)
+                localStorage.setItem("userName", res.data.userName)
+                localStorage.setItem("userRole", res.data.role)
+                navigate('/')
+                toast.success(res.data.message)
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error(error?.response?.data?.message || "Login failed")
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    return (
+        <div className='flex justify-center items-center min-h-screen bg-pink-100'>
+            <Card className="w-full max-w-sm">
+                <CardHeader>
+                    <CardTitle>Welcome back</CardTitle>
+                    <CardDescription>
+                        Enter your credentials to log in
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="flex flex-col gap-4">
+                        <div className="grid gap-2">
+                            <Label htmlFor="email">Email</Label>
+                            <Input
+                                id="email"
+                                type="email"
+                                placeholder="m@example.com"
+                                required
+                                value={formData.email}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="grid gap-2">
+                            <div className="flex items-center justify-between">
+                                <Label htmlFor="password">Password</Label>
+                                <Link to="/forgot-password" className="text-sm text-blue-600 hover:underline">
+                                    Forgot password?
+                                </Link>
+                            </div>
+                            <div className="relative">
+                                <Input
+                                    id="password"
+                                    type={showPassword ? "text" : "password"}
+                                    required
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                />
+                                <button
+                                    type="button"
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </CardContent>
+                <CardFooter className="flex-col gap-2">
+                    <Button onClick={submitHandle} type="submit" className="w-full cursor-pointer bg-blue-500">
+                        {loading ? <Loader2 className='animate-spin' size={20} /> : "Login"}
+                    </Button>
+                    <p>Don't have an account? <Link to="/signup" className='text-blue-600 hover:underline cursor-pointer'>Sign Up</Link></p>
+                </CardFooter>
+            </Card>
+        </div>
+    )
+}
+
+export default Login
