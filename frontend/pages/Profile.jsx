@@ -43,7 +43,7 @@ const Profile = () => {
         
         try {
             setLoading(true)
-            const res = await axios.post(`http://localhost:8000/api/v1/user/change-password/${formData.email}`, {
+            const res = await axios.post(`https://urbancart-2-backend.onrender.com/api/v1/user/change-password/${formData.email}`, {
                 newPassword: formData.newPassword,
                 confirmPassword: formData.confirmPassword
             })

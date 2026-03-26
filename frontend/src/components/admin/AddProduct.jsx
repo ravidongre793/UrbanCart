@@ -31,7 +31,7 @@ const AddProduct = () => {
         try {
             setLoading(true)
             const token = localStorage.getItem('accessToken')
-            const res = await axios.post("http://localhost:8000/api/v1/product/add", formData, {
+            const res = await axios.post("https://urbancart-2-backend.onrender.com/api/v1/product/add", formData, {
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`

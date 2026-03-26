@@ -15,7 +15,7 @@ const VerifyEmail = () => {
 
         try {
             const res = await axios.post(
-                "http://localhost:8000/api/v1/user/verify",
+                "https://urbancart-2-backend.onrender.com/api/v1/user/verify",
                 { token },
                 {
                     headers: {

@@ -25,7 +25,7 @@ const Navbar = () => {
 
     const handleLogout = async () => {
         try {
-            await axios.post("http://localhost:8000/api/v1/user/logout", {}, {
+            await axios.post("https://urbancart-2-backend.onrender.com/api/v1/user/logout", {}, {
                 headers: {
                     Authorization: `Bearer ${user}`
                 }

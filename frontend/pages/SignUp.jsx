@@ -40,7 +40,7 @@ const SignUp = () => {
         console.log(formData);
         try {
             setLoading(true)
-            const res = await axios.post("http://localhost:8000/api/v1/user/register", formData, {
+            const res = await axios.post("https://urbancart-2-backend.onrender.com/api/v1/user/register", formData, {
                 headers: {
                     "content-type": "application/json"
                 }

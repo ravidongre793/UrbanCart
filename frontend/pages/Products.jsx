@@ -11,7 +11,7 @@ const Products = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const res = await axios.get("http://localhost:8000/api/v1/product/all")
+                const res = await axios.get("https://urbancart-2-backend.onrender.com/api/v1/product/all")
                 if (res.data.success) {
                     setProducts(res.data.products)
                 }
